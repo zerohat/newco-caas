@@ -36,7 +36,7 @@ apt-get -y install build-essential apt-transport-https \
 ca-certificates curl software-properties-common \
 libreadline-dev libssl-dev libpq5 libpq-dev libreadline5 \
 libsqlite3-dev libpcap-dev git-core autoconf curl zlib1g-dev \
-libxml2-dev libxslt1-dev libyaml-dev unzip zip ntp
+libxml2-dev libxslt1-dev libyaml-dev unzip zip ntp lsof
 #
 if [ ! -f "/usr/bin/python" ]; then
   ln -s /usr/bin/python3 /usr/bin/python

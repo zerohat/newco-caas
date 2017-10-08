@@ -1,4 +1,26 @@
-#
-# -using Latest Ubuntu LTS
-# -using Latest Terraform Linux 64bit binary
-#
+## 
+## GF @ zerohat . net
+## (c) Devdeer, newCO 2017
+##
+
+Installer based for  Ubuntu 16.04.3 LTS
+
+DON'T TRUST BLINDLY ANY INSTALLER!! HAVE A LOOK FIRST, UNDERSTAND, EXECUTE!! 
+
+
+|-INSTALLATION
+|---Install Ubuntu 16.04.3 LTS minimum ISO
+|----Install Base-Preq & basic setup:
+|-----$# apt-get -y update && apt-get -y upgrade
+|-----$# apt-get -y install git
+|-----$# ip addr show
+|-----NOTE: you need your primary public IP for the installer scripts
+|-----NOTE: set a correct hostname in /etc/hostname & also add correct IP in /etc/hosts
+|---Clone Github Repo & start with initial installer:
+|----$# cd /srv/ && git clone https://github.com/zerohat/newco-caas.git
+|----$# cd newco-caas/INSTALLER && chmod +x setup* 
+|----$# ./setup.sh
+|----$# reboot
+|---After reboot, start with the caas installer (adjust vars first!):
+|----$# ./setup-caas.sh
+

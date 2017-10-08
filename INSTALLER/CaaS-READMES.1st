@@ -1,0 +1,42 @@
+## 
+## GF @ zerohat . net
+## (c) Devdeer, newCO 2017
+##
+
+The whole Container-as-a-Service is based on IBM Cloud Private Release 2.
+WHY? Because it is the best, secured, highly-flexible Private Docker setup
+you will get out there, without paying to much, like Azure Container Services
+or Docker Enterprise!
+
+Architecture:
+https://www.ibm.com/support/knowledgecenter/SSBS6K_2.1.0/getting_started/architecture.html
+
+Main Tutorials:
+https://www.ibm.com/support/knowledgecenter/SSBS6K_2.1.0/kc_welcome_containers.html
+
+
+############# newCO CaaS NOTES ##########
+#########################################
+
+After initial Installation, perform following tasks:
+
+1. Add Kubernetes HELM Charts Repository
+(a) Login > System > Repositories > Add Repository
+    NAME: Kubernetes HELM
+    URL: https://kubernetes-charts.storage.googleapis.com/
+(b) Add additional Repo used to install ISTIO
+    NAME: Google Incubator
+    URL: http://storage.googleapis.com/kubernetes-charts-incubator
+    Click on "Sync Repositories"
+
+2. Install ISTIO (Microsorvices Management: https://istio.io/)
+(a) Login > AppCenter > Search for "istio" and click on "Deploy Application"
+    NOTE: scroll down to config end and enable "rbac.install"
+    Review & Install
+    ...will take around 5min to finish.
+(b) Configure kubectl click
+    Login > Admin User-Id > "Configure Client" and use the kubectl commands
+    on your master node to get access
+
+
+# EOF

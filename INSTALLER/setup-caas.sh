@@ -85,6 +85,7 @@ else
  fi
 
  echo -e "$COL_YELLOW ## Be aware, the are a lot of docker images to be taken care of, so wait 10 more mins, before logging in to the web ui... $COL_RESET"
+ echo -e "$COL_RED ## Change Default Credentials!! admin / SecAdminChange $COL_RESET"
  sleep 4
 fi
 
@@ -105,7 +106,8 @@ echo 'kubectl get pods' >>/root/.bashrc
 
 ### customize ibm main http container
 #docker inspect `docker ps |grep "icp-router" |grep -v "elastics" |cut -d" " -f1`
-for i in `find /var/lib/docker -name "index.[0-9]*.js`
+echo -e "$COL_MAGENTA ## Customizing IBM ICP Branding in the web-ui... $COL_RESET"
+for i in `find /var/lib/docker -name "index.[0-9]*.js"`
 do
   #adjust javascript
   sed -i "s/IBM/${COMPANY}/g" $i

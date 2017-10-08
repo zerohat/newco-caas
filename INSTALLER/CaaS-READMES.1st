@@ -29,14 +29,23 @@ After initial Installation, perform following tasks:
     URL: http://storage.googleapis.com/kubernetes-charts-incubator
     Click on "Sync Repositories"
 
-2. Install ISTIO (Microsorvices Management: https://istio.io/)
+
+2. Install HELM
+(a) Configure kubectl click
+    Login > Admin User-Id > "Configure Client" and use the kubectl commands
+    on your master node to get access
+(b) master node via ssh
+    $# docker run -t --entrypoint=/bin/cp -v /usr/local/bin:/data ibmcom/helm:v2.5.0  /helm /data/
+    $# mkdir -p /var/lib/helm; export HELM_HOME=/var/lib/helm
+    $# helm init --client-only
+
+
+   NOTE: Incuabtor Repo is currently NOT working properly, therefore no ISTIO
+3. Install ISTIO (Microsorvices Management: https://istio.io/)
 (a) Login > AppCenter > Search for "istio" and click on "Deploy Application"
     NOTE: scroll down to config end and enable "rbac.install"
     Review & Install
     ...will take around 5min to finish.
-(b) Configure kubectl click
-    Login > Admin User-Id > "Configure Client" and use the kubectl commands
-    on your master node to get access
 
 
 # EOF

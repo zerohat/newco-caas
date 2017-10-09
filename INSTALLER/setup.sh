@@ -36,7 +36,7 @@ apt-get -y install build-essential apt-transport-https \
 ca-certificates curl software-properties-common \
 libreadline-dev libssl-dev libpq5 libpq-dev libreadline5 \
 libsqlite3-dev libpcap-dev git-core autoconf curl zlib1g-dev \
-libxml2-dev libxslt1-dev libyaml-dev unzip zip ntp lsof
+libxml2-dev libxslt1-dev libyaml-dev unzip zip ntp lsof ctop
 #
 if [ ! -f "/usr/bin/python" ]; then
   ln -s /usr/bin/python3 /usr/bin/python
@@ -60,15 +60,38 @@ echo '
 }
 ' >/etc/docker/daemon.json
 #
-echo '
-#!/bin/sh
+echo '#!/bin/bash
 #
-printf "\n"
-printf " * newCO CAAS Platform\n"
+# Colors
+ESC_SEQ="\x1b["
+COL_RESET=$ESC_SEQ"39;49;00m"
+COL_GREEN=$ESC_SEQ"32;01m"
+COL_YELLOW=$ESC_SEQ"33;01m"
+#
 printf "_________________________________\n"
-printf "\n"
+echo -e "$COL_YELLOW * newCO CaaS Platform $COL_RESET"
+  if [ -f "/opt/ibm/cfc/version" ]; then
+    ICPVERSION=$(cat /opt/ibm/cfc/version)
+    echo -e "   Release:$COL_GREEN $ICPVERSION $COL_RESET"
+  fi
+echo ""
 #
-' >/etc/update-motd.d/10-help-text
+if [ -b "/dev/md0" ]; then
+  printf " * Local Disk Usage: \n"
+  df --output=size,used,avail,pcent,fstype,target -kh /dev/md* |grep -v "devtmpfs"
+  printf "\n"
+fi
+#
+if [ -x /usr/bin/docker ]; then
+  TOTAL=$(docker ps --filter status=running |wc -l)
+  DCRELEASE=$(docker --version |cut -d" " -f3 |sed 's/,//g')
+  printf " * Docker Infos:\n"
+  printf " > Release: \t\t%13s \n" $DCRELEASE
+  printf " > Total Running Containers: \t%s \n" $TOTAL
+fi
+printf "\n"
+#' >/etc/update-motd.d/10-help-text
+
 #
 ssh-keygen -t rsa -b 4096 -N "" -f /root/.ssh/id_rsa4096
 cat /root/.ssh/id_rsa4096.pub >> ~/.ssh/authorized_keys

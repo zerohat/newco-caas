@@ -42,13 +42,18 @@ if [ ! -f "/usr/bin/python" ]; then
   ln -s /usr/bin/python3 /usr/bin/python
 fi
 #
+# azure cli repo
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" | \
+tee /etc/apt/sources.list.d/azure-cli.list
+apt-key adv --keyserver packages.microsoft.com --recv-keys 417A0893
+#
 echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
 $(lsb_release -cs) stable"
 apt-get -y update
 # docker
-apt-get -y install docker-ce
+apt-get -y install docker-ce azure-cli
 echo '
 {
   "storage-driver": "devicemapper"
@@ -75,6 +80,9 @@ wget -q https://releases.hashicorp.com/terraform/${TERRAFORM}/terraform_${TERRAF
 unzip terraform_${TERRAFORM}_linux_amd64.zip
 mv terraform /usr/local/bin/
 ##
+
+### fix /tmp issues with later caas install
+echo "*/30 * * * *    chown root:root /tmp && chmod 1777 /tmp" |crontab -
 
 ## latest rvm
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -

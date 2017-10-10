@@ -80,6 +80,10 @@ if [ -b "/dev/md0" ]; then
   printf " * Local Disk Usage: \n"
   df --output=size,used,avail,pcent,fstype,target -kh /dev/md* |grep -v "devtmpfs"
   printf "\n"
+elif [ ! -z "/dev/mapper/$(hostname)*root*" ]; then
+  printf " * Local Disk Usage: \n"
+  pvs
+  printf "\n"
 fi
 #
 if [ -x /usr/bin/docker ]; then

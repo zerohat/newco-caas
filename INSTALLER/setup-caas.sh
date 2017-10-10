@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #########
-FRESH="NO"                  
+FRESH="YES"                 ## If no, existing Caas will be removed!!                  
 BASE="/srv/ibm-caas2"
 ICP_RELEASE="2.1.0-beta-2"
 MASTER_IP="CHANGE-ME"       ## CE Edition doesnt allow HA-cluster
@@ -10,6 +10,7 @@ CLUSTER_DOMAIN="prodcluster.local"
 CLUSTER_NAME="caas01"
 COMPANY="newCO"
 PRODUCT="CaaS"
+SSH_KEY_EXIST="/root/.ssh/mycaasmgmtkey4096"  #use existing ssh key (will be used for ssh public-key auth!)
 DEBUG="FALSE"               # Set it to true if you are new to the IBM ICP setup
 ICP_HOSTS="/root/icp_hosts" #add a file with ICP hosts or leave it empty
 #########
@@ -36,6 +37,12 @@ if [ ! -d "${BASE}" ]; then
   mkdir -p ${BASE}
 fi
 
+if [ ! -f "$SSH_KEY_EXIST" ]; then
+   ssh-keygen -t rsa -b 4096 -N "" -f /root/.ssh/mycaasmgmtkey4096
+   cat /root/.ssh/mycaasmgmtkey4096.pub >> ~/.ssh/authorized_keys
+fi
+
+
 ### IBM ICP CE Install
 echo -e "$COL_MAGENTA ## Pull initial IBM ICP Installer Docker image.. $COL_RESET"
 
@@ -48,7 +55,12 @@ echo -e "$COL_MAGENTA ## Adjust necessary config in ${BASE}/cluster directory...
 ### configuration
 cd ${BASE}/cluster
 cp config.yaml config.yaml.ORIG
-cp /root/.ssh/id_rsa4096 ssh_key
+if [ -f "$SSH_KEY_EXIST" ]; then
+   cp "$SSH_KEY_EXIST" ssh_key
+else
+  cp /root/.ssh/caasid_rsa4096 ssh_key
+fi
+
 #
 if [ ! -z "$ICP_HOSTS" ]; then
   cp "$ICP_HOSTS" ${BASE}/cluster/hosts

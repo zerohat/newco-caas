@@ -11,6 +11,7 @@ CLUSTER_NAME="caas01"
 COMPANY="newCO"
 PRODUCT="CaaS"
 DEBUG="FALSE"               # Set it to true if you are new to the IBM ICP setup
+ICP_HOSTS="/root/icp_hosts" #add a file with ICP hosts or leave it empty
 #########
 # Colors
 ESC_SEQ="\x1b["
@@ -49,6 +50,13 @@ cd ${BASE}/cluster
 cp config.yaml config.yaml.ORIG
 cp /root/.ssh/id_rsa4096 ssh_key
 #
+if [ ! -z "$ICP_HOSTS" ]; then
+  cp "$ICP_HOSTS" ${BASE}/cluster/hosts
+  echo -e "$COL_YELLOW ## Don't forget to copy the new public RSA4096-ssh-key to all nodes in authorized_keys!! $COL_RESET"
+  sleep 5
+fi
+#
+if [ -z "$ICP_HOSTS" ]; then
 echo "[master]
 ${MASTER_IP}
 
@@ -58,6 +66,7 @@ ${MASTER_IP}
 [proxy]
 ${PROXY_IP}
 " >hosts
+fi
 #
 echo "network_cidr: 10.1.0.0/16
 service_cluster_ip_range: 10.0.0.1/24

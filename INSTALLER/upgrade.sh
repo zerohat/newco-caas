@@ -7,6 +7,8 @@ ICP_RELEASE_OLD="2.1.0-beta-2"      # change to your exiting running version
 ICP_RELEASE_NEW="2.1.0-beta-3"      # change to the new version you want
 LOG="/tmp/upgrade.log"
 REMOTE_NODE=""        # Add IP(s) (with space) of additional nodes for removal
+COMPANY="newCO"
+PRODUCT="CaaS"
 ###########
 # Colors
 ESC_SEQ="\x1b["
@@ -73,6 +75,21 @@ if [ -d "$BASE_OLD" ]; then
   docker run -e LICENSE=accept --net=host \
   -t -v "$(pwd)":/installer/cluster \
   ibmcom/icp-inception:${ICP_RELEASE_NEW} install | tee $LOG
+  #
+  ### customize ibm main http container
+#docker inspect `docker ps |grep "icp-router" |grep -v "elastics" |cut -d" " -f1`
+echo -e "$COL_MAGENTA ## Customizing IBM ICP Branding in the web-ui... $COL_RESET"
+for i in `find /var/lib/docker -name "index.[0-9]*.js"`
+do
+  #adjust javascript
+  sed -i "s/IBM/${COMPANY}/g" $i
+  sed -i "s/private-ce/${PRODUCT}/g" $i
+  #adjust main index.html
+  index="$(echo ${i} | cut -d"/" -f1-13)"
+  sed -i "s/IBM/${COMPANY}/g" $index/index.html
+  sed -i "s/private-ce/${PRODUCT}/g" $index/index.html
+  sed -i "s/private//g" $index/index.html
+done
   #
   echo ""
   echo -e "$COL_MAGENTA ## FINISHED. Take 5 more minutes before logging in.. $COL_RESET"

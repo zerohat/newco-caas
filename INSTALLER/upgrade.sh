@@ -67,11 +67,12 @@ if [ -d "$BASE_OLD" ]; then
   ### configuration
   cd ${BASE_NEW}/cluster
   cp config.yaml config.yaml.ORIG
-  cp ${BASE_OLD}/cluster/config.yml ${BASE_NEW}/cluster/
+  cp ${BASE_OLD}/cluster/config.yaml ${BASE_NEW}/cluster/
   cp ${BASE_OLD}/cluster/ssh_key ${BASE_NEW}/cluster/
   cp ${BASE_OLD}/cluster/hosts ${BASE_NEW}/cluster/
   #
   echo -e "$COL_MAGENTA ## Grab a coffee and take some time... $COL_RESET"
+  sleep 5
   docker run -e LICENSE=accept --net=host \
   -t -v "$(pwd)":/installer/cluster \
   ibmcom/icp-inception:${ICP_RELEASE_NEW} install | tee $LOG

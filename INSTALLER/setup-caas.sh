@@ -25,6 +25,13 @@ COL_MAGENTA=$ESC_SEQ"35;01m"
 COL_CYAN=$ESC_SEQ"36;01m"
 #
 
+# additonal packages we need
+apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
+apt-get -y install glusterfs-client nfs-kernel-server python-pip nfs-common
+modprobe dm_thin_pool
+echo dm_thin_pool | tee -a /etc/modules
+
+
 if [ "${MASTER_IP}" == "CHANGE-ME" ]; then
   echo ""
   echo -e "$COL_RED ## PLEASE, adjust base vars virst !! ## $COL_RESET"

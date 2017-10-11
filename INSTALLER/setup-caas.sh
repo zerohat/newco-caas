@@ -91,7 +91,9 @@ secure_connection_enabled: true
 cluster_domain: ${CLUSTER_DOMAIN}
 cluster_name: ${CLUSTER_NAME}
 #
-metering_enabled: true
+#metering_enabled: true
+#
+auditlog_enabled: true
 " >config.yaml
 #
 if [ "${DEBUG}" == "TRUE" ]; then

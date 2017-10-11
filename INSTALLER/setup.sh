@@ -3,7 +3,6 @@
 ########## BASE VARS
 IP="CHANGE-ME"
 HOST="CHANGE-ME"
-GIT="/srv/newco"
 RVM="2.4.0"
 TERRAFORM="0.10.7"
 ###########

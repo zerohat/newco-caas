@@ -25,7 +25,7 @@ if [ -d "$BASE_OLD" ]; then
   #
   cd $BASE_OLD/cluster
   docker run -e LICENSE=accept --net=host --name=installer \
-    -t -v $(pwd):/installer/cluster ibmcom/icp-inception:${ICP_RELEASE_OLD} uninstall | tee /tmp/$LOG.log
+    -t -v $(pwd):/installer/cluster ibmcom/icp-inception:${ICP_RELEASE_OLD} uninstall | tee $LOG
   sleep 2
   systemctl restart docker
   #

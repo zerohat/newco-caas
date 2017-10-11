@@ -52,7 +52,7 @@ if [ -d "$BASE_OLD" ]; then
   #
   echo -e "$COL_MAGENTA ## Pull initial IBM ICP Installer Docker image.. $COL_RESET"
   #
-  if [ -d "$BASE_NEW" ]; then
+  if [ ! -d "$BASE_NEW" ]; then
      mkdir -p "$BASE_NEW"
   fi
   #

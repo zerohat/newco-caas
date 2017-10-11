@@ -13,6 +13,7 @@ PRODUCT="CaaS"
 SSH_KEY_EXIST="/root/.ssh/mycaasmgmtkey4096"  #use existing ssh key (will be used for ssh public-key auth!)
 DEBUG="FALSE"               # Set it to true if you are new to the IBM ICP setup
 ICP_HOSTS="/root/icp_hosts" #add a file with ICP hosts or leave it empty
+NFS="YES"
 #########
 # Colors
 ESC_SEQ="\x1b["
@@ -27,7 +28,7 @@ COL_CYAN=$ESC_SEQ"36;01m"
 
 # additonal packages we need
 apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
-apt-get -y install glusterfs-client nfs-kernel-server python-pip nfs-common
+apt-get -y install glusterfs-client python-pip nfs-common
 modprobe dm_thin_pool
 echo dm_thin_pool | tee -a /etc/modules
 
@@ -43,6 +44,20 @@ if [ "${FRESH}" == "YES" ]; then
 if [ ! -d "${BASE}" ]; then
   mkdir -p ${BASE}
 fi
+
+if [ "$BFS" == "YES" ]; then
+  echo ""
+  echo -e "$COL_RED ## NFS Installation ## $COL_RESET"
+  apt-get -y install nfs-kernel-server
+  mkdir /var/nfs/general -p
+  chown nobody:nogroup /var/nfs/general
+  echo "
+/var/nfs/general    127.0.0.1(rw,sync,no_subtree_check)
+/var/nfs/general    $MASTER_IP(rw,sync,no_subtree_check)
+"
+  systemctl restart nfs-kernel-server
+fi
+#
 
 if [ ! -f "$SSH_KEY_EXIST" ]; then
    ssh-keygen -t rsa -b 4096 -N "" -f /root/.ssh/mycaasmgmtkey4096

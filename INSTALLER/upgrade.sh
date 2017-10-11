@@ -6,6 +6,7 @@ BASE_NEW="/srv/ibm-caas2-3"         # change to your environment
 ICP_RELEASE_OLD="2.1.0-beta-2"      # change to your exiting running version
 ICP_RELEASE_NEW="2.1.0-beta-3"      # change to the new version you want
 LOG="/tmp/upgrade.log"
+REMOTE_NODE=""        # Add IP(s) (with space) of additional nodes for removal
 ###########
 # Colors
 ESC_SEQ="\x1b["
@@ -35,6 +36,19 @@ if [ -d "$BASE_OLD" ]; then
   systemctl stop docker
   rm -rf /var/lib/docker/overlay/
   systemctl start docker
+  #
+  if [ ! -z "$REMOTE_NODE" ]; then
+    echo -e "$COL_YELLOW ## Removing Remote Nodes CaaS Install ## $COL_RESET"
+    for node in `echo $REMOTE_NODE`
+    do
+      ssh -i $BASE_OLD/cluster/ssh_key $node "docker rm -f $(docker ps -aq)"
+      ssh -i $BASE_OLD/cluster/ssh_key $node "docker rmi -f $(docker images -q)"
+      ssh -i $BASE_OLD/cluster/ssh_key $node "systemctl stop docker"
+      ssh -i $BASE_OLD/cluster/ssh_key $node "rm -rf /var/lib/docker/overlay/"
+      ssh -i $BASE_OLD/cluster/ssh_key $node "systemctl start docker"
+    done
+  fi
+  sleep 2
   #
   echo -e "$COL_MAGENTA ## Pull initial IBM ICP Installer Docker image.. $COL_RESET"
   #

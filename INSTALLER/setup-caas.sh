@@ -54,7 +54,7 @@ if [ "$BFS" == "YES" ]; then
   echo "
 /var/nfs/general    127.0.0.1(rw,sync,no_subtree_check)
 /var/nfs/general    $MASTER_IP(rw,sync,no_subtree_check)
-"
+" >/etc/exports
   systemctl restart nfs-kernel-server
 fi
 #
